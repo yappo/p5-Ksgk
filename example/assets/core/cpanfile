@@ -1,0 +1,4 @@
+requires 'Amon2', '0';
+requires 'Module::Functions', '0';
+
+: KSGK_INCLUDE('requires')
