@@ -1,5 +1,5 @@
 {
-   "abstract" : "Blah blah blah",
+   "abstract" : "Knack of the System Generation for Kurouto",
    "author" : [
       "Kazuhiro Osawa <yappo {at} shibuya {dot} pl>"
    ],
@@ -36,6 +36,12 @@
       },
       "runtime" : {
          "requires" : {
+            "Caroline" : "0",
+            "Class::Accessor::Lite" : "0",
+            "File::stat" : "0",
+            "Path::Tiny" : "0",
+            "String::CamelCase" : "0",
+            "Text::Xslate" : "0",
             "perl" : "5.008005"
          }
       },
@@ -46,6 +52,20 @@
       }
    },
    "release_status" : "stable",
-   "version" : "0.01"
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/yappo/p5-Ksgk/issues"
+      },
+      "homepage" : "https://github.com/yappo/p5-Ksgk",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/yappo/p5-Ksgk.git",
+         "web" : "https://github.com/yappo/p5-Ksgk"
+      }
+   },
+   "version" : "0.01",
+   "x_contributors" : [
+      "Kazuhiro Osawa <yappo@shibuya.pl>"
+   ]
 }
 

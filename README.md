@@ -1,10 +1,10 @@
 # NAME
 
-Ksgk - Blah blah blah
+Ksgk - Knack of the System Generation for Kurouto
 
 # SYNOPSIS
 
-    use Ksgk;
+see example directory.
 
 # DESCRIPTION
 
