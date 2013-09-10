@@ -15,12 +15,14 @@ my $ksgk = Ksgk->new(
         core_dir  => 'core',
         roles => [
             +{
-                name    => 'basic',
-                options => [qw/ l10n apache foo /],
+                name        => 'basic',
+                description => 'basic application',
+                options     => [qw/ l10n apache foo /],
             },
             +{
-                name    => 'lite',
-                options => [],
+                name        => 'lite',
+                description => 'lite application',
+                options     => [],
             },
         ],
 
@@ -42,6 +44,14 @@ my $ksgk = Ksgk->new(
             },
             after => sub {
                 my $ksgk = shift;
+                $ksgk->change_dir($ksgk->target_root);
+
+                $ksgk->command(qw/ carton install /);
+                $ksgk->command(qw/ carton check /);
+
+                $ksgk->command(qw/ git init /);
+
+                $ksgk->change_dir($ksgk->cwd);
             },
             # choose_role          => sub { my $ksgk = shift },
             # choose_options       => sub { my $ksgk = shift },

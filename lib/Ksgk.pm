@@ -61,6 +61,14 @@ sub run_callback {
     $callback->(@args);
 }
 
+sub command {
+    my($self, @args) = @_;
+
+    my $cmd = join ' ', @args;
+    print "\$ $cmd\n";
+    !system(@args) or die $!;
+}
+
 sub new {
     my($class, %args) = @_;
 
@@ -131,9 +139,9 @@ sub choose_role {
 
     my @roles;
     my $idx = 1;
-    for my $name (map { $_->{name} } @{ $self->config->{roles} }) {
-        push @roles, $name;
-        printf "% 3d: %s\n", $idx++, $name;
+    for my $role (@{ $self->config->{roles} }) {
+        push @roles, $role->{name};
+        printf "% 3d: %s - %s\n", $idx++, $role->{name}, $role->{description};
     }
     while (defined(my $line = $self->{readline}->readline("Choose Template Role [1-@{ [ scalar(@roles) ] }]: "))) {
         chomp $line;
