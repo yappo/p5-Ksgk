@@ -157,7 +157,7 @@ sub choose_options {
         my $text = '';
         my $idx = 1;
         for my $name (@options) {
-            $text .= sprintf "[%s] % 3d: %s\r\n", ($choose{$name} ? 'o' : 'x'), $idx, $name;
+            $text .= sprintf "[%s] % 3d: %s - %s\r\n", ($choose{$name} ? 'o' : 'x'), $idx, $name, $self->config->{options}{$name}{description};
             $idx++;
         }
         $idx--;

@@ -24,6 +24,18 @@ my $ksgk = Ksgk->new(
             },
         ],
 
+        options => +{
+            l10n => +{
+                description => 'multi language',
+            },
+            apache => +{
+                description => 'apache server config',
+            },
+            foo => +{
+                description => 'foo',
+            },
+        },
+
         hooks => {
             before => sub {
                 my $ksgk = shift;
