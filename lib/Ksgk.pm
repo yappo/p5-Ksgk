@@ -75,29 +75,36 @@ sub new {
         xslate_data  => undef,
     }, $class;
 
+    my $ksgk_include = sub {
+        my($is_separate, $name, @args) = @_;
+        my $contents = '';
+        if (defined $self->{xslate_data}{$name}) {
+            $contents = join '', map {
+                my $text = $_->(@args);
+                $text =~ s/(\r?\n)\z/$1$1/ if $is_separate;
+                $text;
+            } @{ $self->{xslate_data}{$name} };
+        }
+        my $separater = ($contents =~ /\r/) ? "\r\n" : "\n";
+        $contents =~ s/\r?\n\z//;
+        $contents =~ s/\r?\n\z// if $is_separate;
+
+        my $function_name = $is_separate ? 'KSGK_INCLUDE' : 'KSGK_INCLUDE_ZERO_SEPARATE';
+        return join($separater, "# : $function_name('$name') # BEFORE", $contents, "# : $function_name('$name') # AFTER") . $separater;
+    };
+
     $self->{xslate} = Text::Xslate->new(
         path     => $self->assets_root,
         syntax   => 'Kolon',
         type     => 'text', # use unmark_raw
         function => +{
-            KSGK_CONTENTS => sub {
+            KSGK_CONTENTS              => sub {
                 my($name, $contents) = @_;
                 $self->{xslate_data}{$name} = [] unless defined $self->{xslate_data}{$name};
                 push @{ $self->{xslate_data}{$name} }, $contents;
             },
-            KSGK_INCLUDE => sub {
-                my($name, @args) = @_;
-                my $contents = '';
-                if (defined $self->{xslate_data}{$name}) {
-                    $contents = join "\n", map { $_->(@args) } @{ $self->{xslate_data}{$name} };
-                }
-
-                return <<CONTENTS;
-# : KSGK_INCLUDE('$name') # BEFORE
-$contents
-# : KSGK_INCLUDE('$name') # AFTER
-CONTENTS
-            },
+            KSGK_INCLUDE               => sub { $ksgk_include->(1, @_) },
+            KSGK_INCLUDE_ZERO_SEPARATE => sub { $ksgk_include->(0, @_) },
         }
     );
 

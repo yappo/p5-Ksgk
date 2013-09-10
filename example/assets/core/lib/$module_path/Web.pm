@@ -4,7 +4,7 @@ use warnings;
 use parent qw/<: $module :> Amon2::Web/;
 
 __PACKAGE__->load_plugins(
-: KSGK_INCLUDE('load_plugins')
+: KSGK_INCLUDE_ZERO_SEPARATE('load_plugins')
 );
 
 __PACKAGE__->add_trigger(
