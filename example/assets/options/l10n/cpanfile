@@ -1,4 +1,3 @@
 : KSGK_CONTENTS('requires', -> {
 requires 'Amon2::Plugin::L10N', '0';
-
 : })

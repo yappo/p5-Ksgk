@@ -6,5 +6,4 @@
 : })
 : KSGK_CONTENTS('define_methods', -> {
 sub lang { $_[0]->l10n_language_detection }
-
 : })
