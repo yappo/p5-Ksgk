@@ -52,6 +52,8 @@ my $ksgk = Ksgk->new(
                 $ksgk->command(qw/ git init /);
 
                 $ksgk->change_dir($ksgk->cwd);
+
+                $ksgk->dump_ksgk_config;
             },
             # choose_role          => sub { my $ksgk = shift },
             # choose_options       => sub { my $ksgk = shift },

@@ -5,6 +5,7 @@ use 5.008_005;
 our $VERSION = '0.01';
 
 use Caroline;
+use Data::Dumper ();
 use File::Spec;
 use File::stat;
 use String::CamelCase ();
@@ -67,6 +68,21 @@ sub command {
     my $cmd = join ' ', @args;
     print "\$ $cmd\n";
     !system(@args) or die $!;
+}
+
+sub dump_ksgk_config {
+    my $self = shift;
+    my %data = %{ $self };
+
+    for my $key (qw/ readline xslate xslate_data cwd assets_dir files config /) {
+        delete $data{$key};
+    }
+
+    $self->make_dir($self->target_root);
+    my $file = $self->target_root('ksgk.conf');
+    open my $fh, '>', $file or die "$!: $file";
+    print $fh Data::Dumper::Dumper(\%data);
+    close $fh;
 }
 
 sub new {
