@@ -87,8 +87,16 @@ sub new {
             },
             KSGK_INCLUDE => sub {
                 my($name, @args) = @_;
-                return '' unless defined $self->{xslate_data}{$name};
-                return join "\n", map { $_->(@args) } @{ $self->{xslate_data}{$name} };
+                my $contents = '';
+                if (defined $self->{xslate_data}{$name}) {
+                    $contents = join "\n", map { $_->(@args) } @{ $self->{xslate_data}{$name} };
+                }
+
+                return <<CONTENTS;
+# : KSGK_INCLUDE('$name') # BEFORE
+$contents
+# : KSGK_INCLUDE('$name') # AFTER
+CONTENTS
             },
         }
     );
