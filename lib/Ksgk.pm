@@ -227,7 +227,7 @@ sub read_template_config {
         while (defined(my $line = $self->{readline}->readline("$description [$default]: "))) {
             chomp $line;
             my $ret = $line || $default;
-            next unless $self->run_callback($conf->{validation}, 1, $config, $self);
+            next unless $self->run_callback($conf->{validation}, 1, $ret, $config, $self);
             $config->{$conf->{name}} = $ret;
             last;
         }
