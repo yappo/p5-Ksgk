@@ -318,7 +318,8 @@ sub _write_files {
     my($self, $base, @files) = @_;
 
     my $ignore_render_path = $self->config->{ignore_render_path};
-    while (my($name, $path) = each %{ $base }) {
+    while (my $name = sort keys %{ $base }) {
+        my $path = $base->{$name}
         my $write_path = $self->target_root($name);
         next if $self->{_writed_files}{$write_path}++;
         if (-e $write_path) {
