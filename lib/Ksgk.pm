@@ -46,6 +46,16 @@ sub change_dir {
     chdir $path;
 }
 
+sub change_cwd_dir {
+    my $self = shift;
+    $self->change_dir($self->cwd);
+}
+
+sub change_target_dir {
+    my $self = shift;
+    $self->change_dir($self->target_root);
+}
+
 sub prompt_yn {
     my($self, $text) = @_;
 
