@@ -85,6 +85,11 @@ sub dump_ksgk_config {
     close $fh;
 }
 
+sub has_role_option {
+    my($self, $name) = @_;
+    grep { $_ eq $name } @{ $self->role_options };
+}
+
 sub new {
     my($class, %args) = @_;
 
