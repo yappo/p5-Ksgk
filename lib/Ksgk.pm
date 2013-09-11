@@ -317,6 +317,7 @@ sub write_files {
 sub _write_files {
     my($self, $base, @files) = @_;
 
+    my $ignore_render_path = $self->config->{ignore_render_path};
     while (my($name, $path) = each %{ $base }) {
         my $write_path = $self->target_root($name);
         next if $self->{_writed_files}{$write_path}++;
@@ -334,9 +335,17 @@ sub _write_files {
         print "read base template $template\n";
         print "write file: $name\n";
         open my $fh, '>', $write_path or die "$!: $write_path";
-        print $fh $self->{xslate}->render(
-            $template, $self->template_config,
-        );
+        if ($ignore_render_path && $write_path =~ /$ignore_render_path/) {
+            print $fh do {
+                open my $fh, '<', $template or die "$!: $template";
+                local $/;
+                <$fh>;
+            };
+        } else {
+            print $fh $self->{xslate}->render(
+                $template, $self->template_config,
+            );
+        }
         close $fh;
 
         chmod $stat->mode, $write_path;
