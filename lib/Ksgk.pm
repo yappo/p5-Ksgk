@@ -53,7 +53,8 @@ sub change_cwd_dir {
 
 sub change_target_dir {
     my $self = shift;
-    $self->change_dir($self->target_root);
+    $self->change_dir($self->cwd);
+    $self->change_dir($self->target_root(@_));
 }
 
 sub prompt_yn {
