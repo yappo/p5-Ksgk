@@ -335,9 +335,10 @@ sub _write_files {
         print "read base template $template\n";
         print "write file: $name\n";
         open my $fh, '>', $write_path or die "$!: $write_path";
-        if ($ignore_render_path && $write_path =~ /$ignore_render_path/) {
+        if ($ignore_render_path && $name =~ /$ignore_render_path/) {
+            my $file = $self->assets_root($template);
             print $fh do {
-                open my $fh, '<', $template or die "$!: $template";
+                open my $fh, '<', $file or die "$!: $file";
                 local $/;
                 <$fh>;
             };
