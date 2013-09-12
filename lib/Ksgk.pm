@@ -116,7 +116,7 @@ sub new {
     }, $class;
 
     my $ksgk_include = sub {
-        my($is_separate, $name, @args) = @_;
+        my($is_separate, $start, $end, $name, @args) = @_;
         my $contents = '';
         if (defined $self->{xslate_data}{$name}) {
             $contents = join '', map {
@@ -130,7 +130,7 @@ sub new {
         $contents =~ s/\r?\n\z// if $is_separate;
 
         my $function_name = $is_separate ? 'KSGK_INCLUDE' : 'KSGK_INCLUDE_ZERO_SEPARATE';
-        return join($separater, "# : $function_name('$name') # BEFORE", $contents, "# : $function_name('$name') # AFTER") . $separater;
+        return join($separater, "${start}: $function_name('$name') # BEFORE$end", $contents, "${start}: $function_name('$name') # AFTER$end") . $separater;
     };
 
     $self->{xslate} = Text::Xslate->new(
@@ -143,8 +143,10 @@ sub new {
                 $self->{xslate_data}{$name} = [] unless defined $self->{xslate_data}{$name};
                 push @{ $self->{xslate_data}{$name} }, $contents;
             },
-            KSGK_INCLUDE               => sub { $ksgk_include->(1, @_) },
-            KSGK_INCLUDE_ZERO_SEPARATE => sub { $ksgk_include->(0, @_) },
+            KSGK_INCLUDE                            => sub { $ksgk_include->(1, '# ', '', @_) },
+            KSGK_INCLUDE_ZERO_SEPARATE              => sub { $ksgk_include->(0, '# ', '',  @_) },
+            KSGK_INCLUDE_WITH_COMMENT               => sub { $ksgk_include->(1, @_) },
+            KSGK_INCLUDE_ZERO_SEPARATE_WITH_COMMENT => sub { $ksgk_include->(0, @_) },
         }
     );
 
