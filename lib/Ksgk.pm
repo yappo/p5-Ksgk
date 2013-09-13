@@ -113,9 +113,12 @@ sub new {
         role         => '',
         role_options => [],
         xslate_data  => undef,
+        tag_start    => ($args{tag_start}  || '<ks:'),
+        tag_end      => ($args{tag_end}    || ':gk>'),
+        line_start   => ($args{line_start} || ':ksgk:'),
     }, $class;
 
-    my $ksgk_include = sub {
+    my $include = sub {
         my($is_separate, $start, $end, $name, @args) = @_;
         my $contents = '';
         if (defined $self->{xslate_data}{$name}) {
@@ -129,24 +132,28 @@ sub new {
         $contents =~ s/\r?\n\z//;
         $contents =~ s/\r?\n\z// if $is_separate;
 
-        my $function_name = $is_separate ? 'KSGK_INCLUDE' : 'KSGK_INCLUDE_ZERO_SEPARATE';
-        return join($separater, "${start}: $function_name('$name') # BEFORE$end", $contents, "${start}: $function_name('$name') # AFTER$end") . $separater;
+        my $function_name = $is_separate ? 'INCLUDE' : 'INCLUDE_ZERO_SEPARATE';
+        return join($separater, "${start}$self->{line_start} $function_name('$name') # BEFORE$end", $contents, "${start}$self->{line_start} $function_name('$name') # AFTER$end") . $separater;
     };
 
     $self->{xslate} = Text::Xslate->new(
+        tag_start  => $self->{tag_start},
+        tag_end    => $self->{tag_end},
+        line_start => $self->{line_start},
+        %{ $args{xslate_options} || +{} },
         path     => $self->assets_root,
         syntax   => 'Kolon',
         type     => 'text', # use unmark_raw
         function => +{
-            KSGK_CONTENTS              => sub {
+            CONTENTS              => sub {
                 my($name, $contents) = @_;
                 $self->{xslate_data}{$name} = [] unless defined $self->{xslate_data}{$name};
                 push @{ $self->{xslate_data}{$name} }, $contents;
             },
-            KSGK_INCLUDE                            => sub { $ksgk_include->(1, '# ', '', @_) },
-            KSGK_INCLUDE_ZERO_SEPARATE              => sub { $ksgk_include->(0, '# ', '',  @_) },
-            KSGK_INCLUDE_WITH_COMMENT               => sub { $ksgk_include->(1, @_) },
-            KSGK_INCLUDE_ZERO_SEPARATE_WITH_COMMENT => sub { $ksgk_include->(0, @_) },
+            INCLUDE                            => sub { $include->(1, '# ', '', @_) },
+            INCLUDE_ZERO_SEPARATE              => sub { $include->(0, '# ', '',  @_) },
+            INCLUDE_WITH_COMMENT               => sub { $include->(1, @_) },
+            INCLUDE_ZERO_SEPARATE_WITH_COMMENT => sub { $include->(0, @_) },
         }
     );
 

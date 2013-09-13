@@ -1,22 +1,22 @@
-package <: $module :>::Web;
+package <ks: $module :gk>::Web;
 use strict;
 use warnings;
-use parent qw/<: $module :> Amon2::Web/;
+use parent qw/<ks: $module :gk> Amon2::Web/;
 
 __PACKAGE__->load_plugins(
-: KSGK_INCLUDE_ZERO_SEPARATE('load_plugins')
+:ksgk: INCLUDE_ZERO_SEPARATE('load_plugins')
 );
 
 __PACKAGE__->add_trigger(
     BEFORE_DISPATCH => sub {
         my( $c ) = @_;
 
-: KSGK_INCLUDE('before_dispatch')
+:ksgk: INCLUDE('before_dispatch')
 
         return;
     },
 );
 
-: KSGK_INCLUDE('define_methods')
+:ksgk: INCLUDE('define_methods')
 
 1;

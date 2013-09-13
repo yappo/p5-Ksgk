@@ -1,5 +1,5 @@
-: KSGK_CONTENTS('define_methods', -> {
+:ksgk: CONTENTS('define_methods', -> {
 sub basic_method {
 
 }
-: })
+:ksgk: })

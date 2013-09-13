@@ -2,6 +2,6 @@
 use strict;
 use warnings;
 
-use <: $module :>;
+use <ks: $module :gk>;
 
-my $c = <: $module :>->bootstrap;
+my $c = <ks: $module :gk>->bootstrap;

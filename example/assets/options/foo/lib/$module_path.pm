@@ -1,8 +1,8 @@
-: KSGK_CONTENTS('load_plugins', -> {
+:ksgk: CONTENTS('load_plugins', -> {
     'Foo',
-: })
-: KSGK_CONTENTS('define_methods', -> {
+:ksgk: })
+:ksgk: CONTENTS('define_methods', -> {
 sub foo {
 
 }
-: })
+:ksgk: })

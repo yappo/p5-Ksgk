@@ -1,4 +1,4 @@
-package package <: $module :>::Web::ViewFunctions;
+package package <ks: $module :gk>::Web::ViewFunctions;
 use strict;
 use warnings;
 use utf8;
@@ -9,7 +9,7 @@ use Text::Xslate qw/html_escape mark_Raw/;
 
 our @EXPORT = Module::Functions::get_public_functions;
 
-: KSGK_INCLUDE('define_functions')
+:ksgk: INCLUDE('define_functions')
 
 1;
 
