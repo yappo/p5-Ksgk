@@ -206,13 +206,13 @@ sub choose_options {
         my $text = '';
         my $idx = 1;
         for my $name (@options) {
-            $text .= sprintf "[%s] % 3d: %s - %s\r\n", ($choose{$name} ? 'o' : 'x'), $idx, $name, $self->config->{options}{$name}{description};
+            $text .= sprintf "[%s] % 3d: %s - %s\r\n", ($choose{$name} ? '*' : ' '), $idx, $name, $self->config->{options}{$name}{description};
             $idx++;
         }
         $idx--;
 
         print $text;
-        "Choose Role Options [1-$idx] (0 = selected): "
+        "Choose Role Options [1-$idx] (0 = ready to proceed): "
     };
 
     while (defined(my $line = $self->{readline}->readline($make_ask_text->()))) {
