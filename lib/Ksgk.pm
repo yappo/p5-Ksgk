@@ -258,7 +258,7 @@ sub read_template_config {
         }
     }
 
-    $self->run_callback($template_config->{hooks}{finalize}, $config, $self);
+    $self->run_callback($template_config->{hooks}{finalize}, undef, $config, $self);
 
     $self->{template_config} = $config;
 }
