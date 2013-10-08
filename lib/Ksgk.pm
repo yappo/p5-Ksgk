@@ -117,6 +117,7 @@ sub new {
         tag_start    => ($args{tag_start}  || '<ks:'),
         tag_end      => ($args{tag_end}    || ':gk>'),
         line_start   => ($args{line_start} || ':ksgk:'),
+        output_layer => (defined $args{output_layer} ? $args{output_layer} : ':utf8'),
     }, $class;
 
     my $include = sub {
@@ -366,7 +367,8 @@ sub _write_files {
             File::Copy::copy($file, $write_path)
                     or die "$!: $write_path";
         } else {
-            open my $fh, '>', $write_path or die "$!: $write_path";
+            open my $fh, ">$self->{output_layer}", $write_path
+                or die "$!: $write_path";
             print $fh $self->{xslate}->render(
                 $template, $self->template_config,
             );
