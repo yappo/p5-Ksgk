@@ -11,6 +11,7 @@ use File::stat;
 use String::CamelCase ();
 use Path::Tiny ();
 use Text::Xslate;
+use File::Copy ();
 
 use Class::Accessor::Lite (
     ro => [qw/ argv cwd config assets_dir application_root role_options template_config role files /],
@@ -116,6 +117,7 @@ sub new {
         tag_start    => ($args{tag_start}  || '<ks:'),
         tag_end      => ($args{tag_end}    || ':gk>'),
         line_start   => ($args{line_start} || ':ksgk:'),
+        output_layer => (defined $args{output_layer} ? $args{output_layer} : ':utf8'),
     }, $class;
 
     my $include = sub {
@@ -360,20 +362,18 @@ sub _write_files {
         my $template = $path->relative($self->assets_root);
         print "read base template $template\n";
         print "write file: $name\n";
-        open my $fh, '>', $write_path or die "$!: $write_path";
         if ($ignore_render_path && $name =~ /$ignore_render_path/) {
             my $file = $self->assets_root($template);
-            print $fh do {
-                open my $fh, '<', $file or die "$!: $file";
-                local $/;
-                <$fh>;
-            };
+            File::Copy::copy($file, $write_path)
+                    or die "$!: $write_path";
         } else {
+            open my $fh, ">$self->{output_layer}", $write_path
+                or die "$!: $write_path";
             print $fh $self->{xslate}->render(
                 $template, $self->template_config,
             );
+            close $fh;
         }
-        close $fh;
 
         chmod $stat->mode, $write_path;
     }
