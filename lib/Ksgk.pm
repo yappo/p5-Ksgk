@@ -363,9 +363,7 @@ sub _write_files {
         print "read base template $template\n";
         print "write file: $name\n";
         if ($ignore_render_path && $name =~ /$ignore_render_path/) {
-            my $file = $self->assets_root($template);
-            File::Copy::copy($file, $write_path)
-                    or die "$!: $write_path";
+            $self->assets_root($template)->copy($write_path);
         } else {
             open my $fh, ">$self->{output_layer}", $write_path
                 or die "$!: $write_path";
