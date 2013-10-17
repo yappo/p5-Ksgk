@@ -12,6 +12,7 @@ use String::CamelCase ();
 use Path::Tiny ();
 use Text::Xslate;
 use File::Copy ();
+use Carp ();
 
 use Class::Accessor::Lite (
     ro => [qw/ argv cwd config assets_dir application_root role_options template_config role files /],
@@ -239,6 +240,10 @@ sub read_template_config {
     my $config = +{
         application_name => shift @{ $self->argv },
     };
+
+    unless (defined $config->{application_name}) {
+        Carp::croak('Application name was not specified (in argv[0]).');
+    }
 
     $self->run_callback($template_config->{hooks}{init}, undef, $config, $self);
 
