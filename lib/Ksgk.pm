@@ -93,7 +93,7 @@ sub dump_ksgk_config {
     $self->make_dir($self->target_root);
     my $file = $self->target_root('ksgk.conf');
     open my $fh, '>', $file or die "$!: $file";
-    print $fh Data::Dumper::Dumper(\%data);
+    print $fh Data::Dumper->new([ \%data ])->Terse(1)->Sortkeys(1)->Dump;
     close $fh;
 }
 
